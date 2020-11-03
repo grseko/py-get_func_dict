@@ -14,12 +14,11 @@ class GetFuncDictTestCase(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 
-    def test_0_functions_3_attributes(self):
+    def test_0_functions_2_attributes(self):
         # Given
         class Object:
-            a = 'test'
-            b = 1.5
-            c = 2
+            foo = 'test'
+            bar = 1.5
 
         obj = Object()
 
@@ -78,7 +77,7 @@ class GetFuncDictTestCase(unittest.TestCase):
 
         # Then
         self.assertDictEqual(expected, actual)
-        self.assertEqual('texttext', actual['foo']())
+        self.assertEqual('texttext', actual['foo'](), msg="Oops!")
         self.assertEqual(3.0, actual['bar']())
 
     def test_2_functions_3_attributes_1_private_function_1_protected_function(self):
@@ -95,10 +94,10 @@ class GetFuncDictTestCase(unittest.TestCase):
                 return self.b * self.c
 
             def __private(self):
-                return ("I'm private! " * self.c).strip()
+                return "Private"
 
             def _protected(self):
-                return ("I'm protected! " * self.c).strip()
+                return f"Hi, I'm Protected. He's {self.__private()}."
 
         obj = Object()
 
@@ -113,15 +112,16 @@ class GetFuncDictTestCase(unittest.TestCase):
         self.assertDictEqual(expected, actual)
         self.assertEqual('texttext', actual['foo']())
         self.assertEqual(3.0, actual['bar']())
+        self.assertEqual("Hi, I'm Protected. He's Private.", obj._protected())
 
     def test_1_private_function_1_protected_function(self):
         # Given
         class Object:
             def __private(self):
-                return ("I'm private! " * 2).strip()
+                return "Private"
 
             def _protected(self):
-                return ("I'm protected! " * 2).strip()
+                return f"Hi, I'm Protected. He's {self.__private()}."
 
         obj = Object()
 
@@ -131,6 +131,7 @@ class GetFuncDictTestCase(unittest.TestCase):
 
         # Then
         self.assertDictEqual(expected, actual)
+        self.assertEqual("Hi, I'm Protected. He's Private.", obj._protected())
 
 
 suite = unittest.TestLoader().loadTestsFromTestCase(GetFuncDictTestCase)
