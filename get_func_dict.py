@@ -78,7 +78,7 @@ class GetFuncDictTestCase(unittest.TestCase):
 
         # Then
         self.assertDictEqual(expected, actual)
-        self.assertEqual('texttext', actual['foo'](), msg="Oops!")
+        self.assertEqual('texttext', actual['foo']())
         self.assertEqual(3.0, actual['bar']())
 
     def test_2_functions_3_attributes_1_private_function_1_protected_function(self):
